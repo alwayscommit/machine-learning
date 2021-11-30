@@ -1,0 +1,6 @@
+Crop - Potato, Rice, Banana, if we are done then - Coconut, Sweet potato, Turmeric
+
+Potato dataset - 1997 - 2014
+
+for each State -> for each District -> state average temperature | state average rainfall | sum(crop yield - tonnes)/sum(area - hectares)
+
