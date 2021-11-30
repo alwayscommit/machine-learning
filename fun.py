@@ -32,6 +32,7 @@ for state in state_list:
 
                 rainfall_state_df = rainfall_df[rainfall_df["SUBDIVISION"].str.contains(state)]
                 rainfall_year_df = rainfall_state_df[rainfall_state_df["YEAR"] == year]
+                rainfall_annual_df = rainfall_year_df["ANNUAL"]
 
                 temp_year_df = temperature_df[temperature_df["Year"] == year]
                 temp_state_df = temp_year_df[state]
@@ -40,7 +41,8 @@ for state in state_list:
                     dataset = dataset.append(
                         {'State': state, 'Year': year, 'Produce': produce,
                          'Temperature': temp_state_df.iloc[0],
-                         'Rainfall': rainfall_year_df["ANNUAL"].iloc[0]},
+                         'Rainfall': rainfall_annual_df.iloc[0]},
                         ignore_index=True)
 
 dataset.to_csv(crop + ".csv", index=False)
+print("Saving crop file as " + crop + ".csv")
