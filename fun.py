@@ -18,6 +18,7 @@ temperature_df = temperature_df[temperature_df.columns.drop(list(temperature_df.
 print(sorted(temperature_df.columns.unique()))
 
 for state in state_list:
+    # remove "Andaman and Nicobar Islands" and replace with state
     state_subset = df[df["State_Name"] == "Andaman and Nicobar Islands"]
     for year in year_list:
         year_subset = state_subset[state_subset["Crop_Year"] == year]
@@ -27,7 +28,9 @@ for state in state_list:
             dataset = dataset.append(
                 {'State': state, 'Year': year, 'Produce': produce, 'Temperature': 10, 'Rainfall': 10},
                 ignore_index=True)
+            # remove these breaks later
             break
+    # remove these breaks later
     break
 
 print("Final Dataset :: ")
