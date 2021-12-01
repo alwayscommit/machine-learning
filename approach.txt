@@ -4,3 +4,8 @@ Potato dataset - 1997 - 2014
 
 for each State -> for each District -> state average temperature | state average rainfall | sum(crop yield - tonnes)/sum(area - hectares)
 
+Autumn - June July August September
+Kharif - June July August September
+Rabi - October November December January February March
+Winter - June July August September October November
+Summer - October November December January February March

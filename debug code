@@ -1,0 +1,20 @@
+ # we can remove these lines later, before code submission... they help in debugging a bit
+                # if not rainfall_year_df.empty and not temp_state_df.empty and (not pd.isna(produce)):
+                #     print(
+                #         "State : " + str(state) + ", Year : " + str(year) + ", Produce : " + str(
+                #             produce) + ", Temp : " + str(temp_state_df.iloc[0]) + ", Rainfall : " + str(
+                #             rainfall_annual_df.iloc[0]))
+                # else:
+                #     print("EMPTY!!!")
+                #     print("Sum of Produce :: " + str(sum(crop_subset["Production"])))
+                #     print("Sum of Area :: " + str(sum(crop_subset["Area"])))
+                #     print(
+                #         "State : " + str(state) + ", Year : " + str(year) + ", Produce : " + str(
+                #             produce) + ", Temp : " + str(temp_state_df) + ", Rainfall : " + str(
+                #             rainfall_annual_df))
+
+
+                    if crop_subset["Season"] == "Kharif" or crop_subset["Season"] == "Autumn":
+                        rainfall_annual_df = rainfall_year_df["JJAS"]
+
+                    if crop_subset["Season"] == "Whole Year" or crop_subset["Season"] == "Whole Year":
