@@ -21,7 +21,6 @@ df['State_Name'] = df['State_Name'].str.strip()
 #     temperature_df.columns.drop(list(temperature_df.filter(regex='Administrative unit not ava*')))]
 
 for state in state_list:
-    state = "Tamil Nadu"
     state_subset = df[df["State_Name"] == state]
     # district_list = state_subset["District_Name"].unique()
     # print(len(district_list))
