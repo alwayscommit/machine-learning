@@ -1,6 +1,6 @@
 import pandas as pd
 
-crop = 'Rice'
+crop = 'Potato'
 
 dataset = pd.DataFrame(columns=['State', 'Year', 'Produce', 'Temperature', 'Rainfall'])
 
