@@ -15,6 +15,9 @@ df_potato = df_potato.dropna()
 df_banana = pd.read_csv("Banana.csv")
 df_banana = df_banana.dropna()
 
+df = pd.read_csv("Turmeric.csv")
+df = df.dropna()
+
 # X_rice = df_rice[['Temperature', 'Rainfall']]
 # X1_rice = df_rice.iloc[:, 3]
 # X2_rice = df_rice.iloc[:, 4]
@@ -31,9 +34,9 @@ df_banana = df_banana.dropna()
 # y_banana = df_banana['Produce']
 
 # change the crop label and dataframe to be used
-label = "Rice Crop"
-X_original = df_rice[['Temperature', 'Rainfall']]
-y = df_rice[['Produce']]
+label = "Turmeric Crop"
+X_original = df[['Temperature', 'Rainfall']]
+y = df[['Produce']]
 
 X_scaled = pd.DataFrame(MinMaxScaler().fit_transform(X_original))
 

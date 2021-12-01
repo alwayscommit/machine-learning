@@ -14,8 +14,9 @@ year_list = sorted(df['Crop_Year'].unique())
 
 df['State_Name'] = df['State_Name'].str.strip()
 df['Season'] = df['Season'].str.strip()
+df['Crop'] = df['Crop'].str.strip()
 
-season_list = sorted(df['Season'].unique())
+season_list = ["Kharif", "Rabi", "Whole Year", "Summer", "Winter"]
 print(season_list)
 
 # print(state_list)
@@ -42,10 +43,11 @@ for state in state_list:
                     rainfall_state_df = rainfall_df[rainfall_df["SUBDIVISION"].str.contains(state)]
                     rainfall_year_df = rainfall_state_df[rainfall_state_df["YEAR"] == year]
 
-                    if season == "Kharif" or season == "Autumn":
+                    if season == "Kharif" or season == "Summer":
                         rainfall_annual_df = rainfall_year_df["JJAS"]
                         if not rainfall_annual_df.empty:
                             rainfall = rainfall_annual_df.iloc[0]
+                            combined_season = "Kharif"
                         else:
                             continue
 
@@ -53,21 +55,20 @@ for state in state_list:
                         rainfall_annual_df = rainfall_year_df["ANNUAL"]
                         if not rainfall_annual_df.empty:
                             rainfall = rainfall_annual_df.iloc[0]
+                            combined_season = "Whole Year"
                         else:
                             continue
 
-                    if season == "Rabi" or season == "Summer":
+                    if season == "Rabi" or season == "Winter":
                         rainfall = rainfall_year_df[["OND", "JF", "MAR"]].sum().sum()
-
-                    if season == "Winter":
-                        rainfall = rainfall_year_df[["JJAS", "OCT", "NOV"]].sum().sum()
+                        combined_season = "Rabi"
 
                     temp_year_df = temperature_df[temperature_df["Year"] == year]
                     temp_state_df = temp_year_df[state]
 
                     if not rainfall_year_df.empty and not temp_state_df.empty and (not pd.isna(produce)):
                         dataset = dataset.append(
-                            {'State': state, 'Year': year, 'Season': season, 'Produce': produce,
+                            {'State': state, 'Year': year, 'Season': combined_season, 'Produce': produce,
                              'Temperature': temp_state_df.iloc[0],
                              'Rainfall': rainfall},
                             ignore_index=True)
