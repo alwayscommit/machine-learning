@@ -37,8 +37,6 @@ for state in state_list:
                 temp_year_df = temperature_df[temperature_df["Year"] == year]
                 temp_state_df = temp_year_df[state]
 
-                print(produce)
-
                 if not rainfall_year_df.empty and not temp_state_df.empty and not pd.isna(produce):
                     dataset = dataset.append(
                         {'State': state, 'Year': year, 'Produce': produce,
