@@ -7,15 +7,19 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn import linear_model
 from math import sqrt
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.dummy import DummyRegressor
+from sklearn.tree import DecisionTreeRegressor
 
-df_rice = pd.read_csv("Rice.csv")
-df_rice = df_rice.dropna()
-df_potato = pd.read_csv("Potato.csv")
-df_potato = df_potato.dropna()
-df_banana = pd.read_csv("Banana.csv")
-df_banana = df_banana.dropna()
+# df_rice = pd.read_csv("Rice.csv")
+# df_rice = df_rice.dropna()
+# df_potato = pd.read_csv("Potato.csv")
+# df_potato = df_potato.dropna()
+# df_banana = pd.read_csv("Banana.csv")
+# df_banana = df_banana.dropna()
 
-df = pd.read_csv("Turmeric.csv")
+df = pd.read_csv("Rice.csv")
+label = "Rice Crop"
 df = df.dropna()
 
 # X_rice = df_rice[['Temperature', 'Rainfall']]
@@ -34,7 +38,6 @@ df = df.dropna()
 # y_banana = df_banana['Produce']
 
 # change the crop label and dataframe to be used
-label = "Turmeric Crop"
 X_original = df[['Temperature', 'Rainfall']]
 y = df[['Produce']]
 
@@ -44,7 +47,9 @@ X1 = X_scaled.iloc[:, 0]
 X2 = X_scaled.iloc[:, 1]
 X = np.column_stack((X1, X2))
 
-linear = linear_model.LinearRegression()
+# model = linear_model.LinearRegression()
+model = RandomForestRegressor()
+# model = DecisionTreeRegressor(max_depth=5)
 # linear.fit(X_rice, y_rice)
 # yPred_rice = linear.predict(X_rice)
 # linear.fit(X_banana, y_banana)
@@ -52,8 +57,11 @@ linear = linear_model.LinearRegression()
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20)
 
-linear.fit(X_train, y_train)
-yPred = linear.predict(X_test)
+#ravel() is used for for random forest
+model.fit(X_train, y_train.values.ravel())
+# model.fit(X_train, y_train)
+yPred = model.predict(X_test)
+
 
 # yPred_individual = linear.predict([[]])
 
@@ -82,6 +90,12 @@ plt.ylabel("Produce")
 plt.legend(loc='center left', bbox_to_anchor=(-0.5, -0.3))
 plt.show()
 
+print(model.score(X_test, y_test))
 print("Mean squared error: %.2f" % mean_squared_error(y_test, yPred))
 print("Root mean squared error: %.2f" % sqrt(mean_squared_error(y_test, yPred)))
 print("r2 square: %.2f" % r2_score(y_test, yPred))
+
+dummy_regr = DummyRegressor(strategy="mean")
+dummy_regr.fit(X_train, y_train.values.ravel())
+dummy_regr.predict(X_test)
+print(dummy_regr.score(X_test, y_test))
