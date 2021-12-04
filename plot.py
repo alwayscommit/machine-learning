@@ -18,8 +18,8 @@ from sklearn.tree import DecisionTreeRegressor
 # df_banana = pd.read_csv("Banana.csv")
 # df_banana = df_banana.dropna()
 
-df = pd.read_csv("Turmeric.csv")
-label = "Turmeric Crop"
+df = pd.read_csv("Banana.csv")
+label = "Banana Crop"
 df = df.dropna()
 
 # X_rice = df_rice[['Temperature', 'Rainfall']]

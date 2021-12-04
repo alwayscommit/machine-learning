@@ -56,19 +56,19 @@ for district in district_list:
                         total_area = crop_subset["Area"].sum()
                         produce = (total_production / total_area)
 
-                        rainfall_state_df = rainfall_df[
+                        rainfall_district_df = rainfall_df[
                             rainfall_df["DISTRICTS_NAME"].str.contains(district, case=False)]
-                        if rainfall_state_df.empty:
+                        if rainfall_district_df.empty:
                             continue
 
-                        rainfall_year_df = rainfall_state_df[rainfall_state_df["YEAR"] == year]
+                        rainfall_year_df = rainfall_district_df[rainfall_district_df["YEAR"] == year]
                         if rainfall_year_df.empty:
                             continue
 
                         if season == "Kharif" or season == "Summer":
-                            rainfall_value_df = rainfall_year_df[rainfall_year_df['MONTH'].isin([6, 7, 8, 9])]
-                            if not rainfall_value_df.empty:
-                                rainfall = rainfall_value_df['VALUE'].sum()
+                            rainfall_kharif = rainfall_year_df[rainfall_year_df['MONTH'].isin([6, 7, 8, 9])]
+                            if not rainfall_kharif.empty:
+                                rainfall = rainfall_kharif['VALUE'].sum()
                                 combined_season = "Kharif"
                             else:
                                 continue
@@ -76,20 +76,20 @@ for district in district_list:
                         if season == "Whole Year":
                             if not rainfall_year_df.empty:
                                 rainfall = rainfall_year_df['VALUE'].sum()
-                                combined_season = "Kharif"
+                                combined_season = "Whole Year"
                             else:
                                 continue
 
                         if season == "Rabi" or season == "Winter":
-                            rainfall_value_df = rainfall_year_df[rainfall_year_df['MONTH'].isin([10, 11, 12, 1, 2, 3])]
-                            if not rainfall_value_df.empty:
-                                rainfall = rainfall_value_df['VALUE'].sum()
+                            rainfall_rabi = rainfall_year_df[rainfall_year_df['MONTH'].isin([10, 11, 12, 1, 2, 3])]
+                            if not rainfall_rabi.empty:
+                                rainfall = rainfall_rabi['VALUE'].sum()
                                 combined_season = "Rabi"
                             else:
                                 continue
 
-                        state = rainfall_state_df['INDIAN_STATES_NAME'].iloc[0]
-                        if any(state in s for s in ignore_state_list):
+                        state = rainfall_district_df['INDIAN_STATES_NAME'].iloc[0]
+                        if any(state in ignore_state for ignore_state in ignore_state_list):
                             continue
 
                         temp_year_df = temperature_df[temperature_df["Year"] == year]
