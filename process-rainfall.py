@@ -12,4 +12,6 @@ rainfall_df = rainfall_df[~rainfall_df.VARIABLE_NAME.str.contains("%")]
 
 rainfall_df.to_csv("rainfall-processed.csv", index=False, header=True)
 
-print("Agar-Malwa".replace("-", " ").lower().__contains__("AGAR MALWA".lower()))
+print("Rainfall data cleaned.")
+
+# print("Agar-Malwa".replace("-", " ").lower().__contains__("AGAR MALWA".lower()))
