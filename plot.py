@@ -18,8 +18,8 @@ from sklearn.tree import DecisionTreeRegressor
 # df_banana = pd.read_csv("Banana.csv")
 # df_banana = df_banana.dropna()
 
-df = pd.read_csv("Banana.csv")
-label = "Banana Crop"
+df = pd.read_csv("Turmeric.csv")
+label = "Turmeric Crop"
 df = df.dropna()
 
 # X_rice = df_rice[['Temperature', 'Rainfall']]
@@ -59,7 +59,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20)
 
 #ravel() is used for for random forest
 model.fit(X_train, y_train.values.ravel())
-model.fit(X_train, y_train)
+# model.fit(X_train, y_train)
 yPred = model.predict(X_test)
 
 
