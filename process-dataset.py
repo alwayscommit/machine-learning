@@ -1,6 +1,6 @@
 import pandas as pd
 
-crop = 'Turmeric'
+crop = 'Banana'
 
 dataset = pd.DataFrame(columns=['State', 'District', 'Year', 'Season', 'Produce', 'Temperature', 'Rainfall'])
 
@@ -17,17 +17,17 @@ df['Season'] = df['Season'].str.strip()
 df['Crop'] = df['Crop'].str.strip()
 df['District_Name'] = df['District_Name'].str.strip()
 
-print("Crop Years: %", sorted(df['Crop_Year'].unique()))
-print("Rainfall Years: %", sorted(rainfall_df['YEAR'].unique()))
+# print("Crop Years: %", sorted(df['Crop_Year'].unique()))
+# print("Rainfall Years: %", sorted(rainfall_df['YEAR'].unique()))
 
-print("Rainfall districts: ", sorted(rainfall_df["DISTRICTS_NAME"].unique()))
-print("Crop districts: ", sorted(df["District_Name"].unique()))
+# print("Rainfall districts: ", sorted(rainfall_df["DISTRICTS_NAME"].unique()))
+# print("Crop districts: ", sorted(df["District_Name"].unique()))
 
-print("Rainfall states: ", sorted(rainfall_df["INDIAN_STATES_NAME"].unique()))
-print("Crop states: ", sorted(df["State_Name"].unique()))
+# print("Rainfall states: ", sorted(rainfall_df["INDIAN_STATES_NAME"].unique()))
+# print("Crop states: ", sorted(df["State_Name"].unique()))
 
-print("Rainfall districts Length: ", len(rainfall_df["DISTRICTS_NAME"].unique()))
-print("Crop districts Length: ", len(df["District_Name"].unique()))
+# print("Rainfall districts Length: ", len(rainfall_df["DISTRICTS_NAME"].unique()))
+# print("Crop districts Length: ", len(df["District_Name"].unique()))
 
 season_list = ["Kharif", "Rabi", "Whole Year", "Summer", "Winter"]
 year_list = [2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015]
@@ -60,7 +60,10 @@ for district in district_list:
                             rainfall_df["DISTRICTS_NAME"].str.contains(district, case=False)]
                         if rainfall_state_df.empty:
                             continue
+
                         rainfall_year_df = rainfall_state_df[rainfall_state_df["YEAR"] == year]
+                        if rainfall_year_df.empty:
+                            continue
 
                         if season == "Kharif" or season == "Summer":
                             rainfall_value_df = rainfall_year_df[rainfall_year_df['MONTH'].isin([6, 7, 8, 9])]
@@ -71,7 +74,7 @@ for district in district_list:
                                 continue
 
                         if season == "Whole Year":
-                            if not rainfall_value_df.empty:
+                            if not rainfall_year_df.empty:
                                 rainfall = rainfall_year_df['VALUE'].sum()
                                 combined_season = "Kharif"
                             else:
