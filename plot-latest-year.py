@@ -25,18 +25,18 @@ X_test_original = df_test[['Temperature', 'Rainfall']]
 y_test = df_test[['Produce']]
 
 #scaling doesn't improve the score much, commented for now.
-# scale = MinMaxScaler().fit(X_train_original)
-# X_train_scaled = pd.DataFrame(scale.transform(X_train_original))
-# X_test_scaled = pd.DataFrame(scale.transform(X_test_original))
+scale = StandardScaler().fit(X_train_original)
+X_train_scaled = pd.DataFrame(scale.transform(X_train_original))
+X_test_scaled = pd.DataFrame(scale.transform(X_test_original))
 
-X1 = X_train_original.iloc[:, 0]
-X2 = X_train_original.iloc[:, 1]
+X1 = X_train_scaled.iloc[:, 0]
+X2 = X_train_scaled.iloc[:, 1]
 # add new feature based on rainfall and temp together
 X3 = X1*X2
 X_train = np.column_stack((X1, X2, X3))
 
-X1_test = X_test_original.iloc[:, 0]
-X2_test = X_test_original.iloc[:, 1]
+X1_test = X_test_scaled.iloc[:, 0]
+X2_test = X_test_scaled.iloc[:, 1]
 # add new feature based on rainfall and temp together
 X3_test = X1_test*X2_test
 X_test = np.column_stack((X1_test, X2_test, X3_test))
@@ -46,8 +46,8 @@ model = RandomForestRegressor()
 # model = DecisionTreeRegressor(max_depth=5)
 
 #ravel() is used for for random forest
-model.fit(X_train, y_train.values.ravel())
-# model.fit(X_train, y_train)
+# model.fit(X_train, y_train.values.ravel())
+model.fit(X_train, y_train)
 yPred = model.predict(X_test)
 
 plt.rc('font', size=18)
@@ -75,6 +75,7 @@ print("r2 square: %.2f" % r2_score(y_test, yPred))
 
 #dummy
 dummy_regr = DummyRegressor(strategy="mean")
-dummy_regr.fit(X_train, y_train.values.ravel())
+dummy_regr.fit(X_train, y_train)
 dummy_regr.predict(X_test)
 print(dummy_regr.score(X_test, y_test))
+

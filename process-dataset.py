@@ -1,6 +1,6 @@
 import pandas as pd
 
-crop = 'Banana'
+crop = 'Potato'
 
 train_dataset = pd.DataFrame(columns=['State', 'District', 'Year', 'Season', 'Produce', 'Temperature', 'Rainfall'])
 test_dataset = pd.DataFrame(columns=['State', 'District', 'Year', 'Season', 'Produce', 'Temperature', 'Rainfall'])

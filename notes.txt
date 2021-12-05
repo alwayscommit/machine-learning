@@ -1,0 +1,4 @@
+Latest Year Predictions
+Crop, r2 Score, method
+Banana, 0.86, X1 X2 X3
+Turmeric,0.40, X1 X2
