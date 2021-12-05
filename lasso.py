@@ -7,15 +7,15 @@ from sklearn.metrics import mean_squared_error, r2_score
 from math import sqrt
 from sklearn.linear_model import Lasso
 
-df_rice = pd.read_csv("Rice.csv")
-df_rice = df_rice.dropna()
-df_potato = pd.read_csv("Potato.csv")
-df_potato = df_potato.dropna()
-df_banana = pd.read_csv("Banana.csv")
-df_banana = df_banana.dropna()
+# df_rice = pd.read_csv("Rice.csv")
+# df_rice = df_rice.dropna()
+# df_potato = pd.read_csv("Potato.csv")
+# df_potato = df_potato.dropna()
+# df_banana = pd.read_csv("Banana.csv")
+# df_banana = df_banana.dropna()
 
-df = pd.read_csv("Turmeric.csv")
-df = df.dropna()
+# df = pd.read_csv("Turmeric.csv")
+# df = df.dropna()
 
 # X_rice = df_rice[['Temperature', 'Rainfall']]
 # X1_rice = df_rice.iloc[:, 3]
@@ -33,21 +33,36 @@ df = df.dropna()
 # y_banana = df_banana['Produce']
 
 # change the crop label and dataframe to be used
-label = "Turmeric Crop"
-X_original = df[['Temperature', 'Rainfall']]
-y = df[['Produce']]
 
-X_scaled = pd.DataFrame(MinMaxScaler().fit_transform(X_original))
+df_train = pd.read_csv("train_" + "Banana.csv")
+df_test = pd.read_csv("test_" + "Banana.csv")
+df_train = df_train.dropna()
+df_test = df_test.dropna()
+label = "Banana Crop"
 
-X1 = X_scaled.iloc[:, 0]
-X2 = X_scaled.iloc[:, 1]
-X = np.column_stack((X1, X2))
+X_train_original = df_train[['Temperature', 'Rainfall']]
+y_train = df_train[['Produce']]
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20)
+X_test_original = df_test[['Temperature', 'Rainfall']]
+y_test = df_test[['Produce']]
+
+X1_train = X_train_original.iloc[:, 0]
+X2_train = X_train_original.iloc[:, 1]
+X_train = np.column_stack((X1_train, X2_train))
+
+X1_test = X_test_original.iloc[:, 0]
+X2_test = X_test_original.iloc[:, 1]
+X_test = np.column_stack((X1_test, X2_test))
+
+# For Polynomial features:
+# X3 = X1_train * X2_train
+# X_train = np.column_stack((X1_train, X2_train, X3))
+# X3_test = X1_test * X2_test
+# X_test = np.column_stack((X1_test, X2_test, X3_test))
 
 mean_error = []
 std_error = []
-Ci_range = [0.1, 1, 5, 10, 15, 50, 75, 100]
+Ci_range = [0.1, 1, 5, 10, 15, 20]
 for Ci in Ci_range:
     temp = []
     model = Lasso(alpha=1 / (2 * Ci))
@@ -55,6 +70,7 @@ for Ci in Ci_range:
     ypred = model.predict(X_test)
     mean_error.append(mean_squared_error(y_test, ypred))
     std_error.append(np.array(mean_error).std())
+    print("C", Ci)
     print("Mean squared error: %.2f" % mean_squared_error(y_test, ypred))
     print("Root mean squared error: %.2f" % sqrt(mean_squared_error(y_test, ypred)))
     print("r2 square: %.2f" % r2_score(y_test, ypred))
