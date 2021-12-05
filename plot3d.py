@@ -9,77 +9,88 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, r2_score
 from math import sqrt
 
-df = pd.read_csv("Turmeric.csv")
-label = "Turmeric Crop"
-df = df.dropna()
+# All the scores mentioned below are for banana crop for now.
 
-X_original = df[['Temperature', 'Rainfall']]
-y = df[['Produce']]
+df_train = pd.read_csv("train_" + "Banana.csv")
+df_test = pd.read_csv("test_" + "Banana.csv")
+df_train = df_train.dropna()
+df_test = df_test.dropna()
+label = "Banana Crop"
 
-X1 = X_original.iloc[:, 0]
-X2 = X_original.iloc[:, 1]
+X_train_original = df_train[['Temperature', 'Rainfall']]
+y_train = df_train[['Produce']]
 
-# Original features with RandomForestRegressor
-# X = np.column_stack((X1, X2))
+X_test_original = df_test[['Temperature', 'Rainfall']]
+y_test = df_test[['Produce']]
+
+X1_train = X_train_original.iloc[:, 0]
+X2_train = X_train_original.iloc[:, 1]
+X_train = np.column_stack((X1_train, X2_train))
+
+X1_test = X_test_original.iloc[:, 0]
+X2_test = X_test_original.iloc[:, 1]
+X_test = np.column_stack((X1_test, X2_test))
+
+# >>Original features with RandomForestRegressor
 # model = RandomForestRegressor()
-# X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20)
 # model.fit(X_train, y_train.values.ravel())
-# yPred = model.predict(X_test)
+# yPred = model.predict(X_test)  # Score: MSE: 29.79 RMSE: 5.46 r2: 0.87
 
-
-# Polynomial features with RandomForestRegressor
+# >>Polynomial features with RandomForestRegressor
 # 1. Three features
-# X3 = X1 * X2
-# X = np.column_stack((X1, X2, X3))
-# X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20)
+X3 = X1_train * X2_train
+X_train = np.column_stack((X1_train, X2_train, X3))
+X3_test = X1_test * X2_test
+X_test = np.column_stack((X1_test, X2_test, X3_test))  # Score: MSE: 29.89 RMSE: 5.47 r2: 0.87
 
 # 2. Square
-X1 = X1 * X1
-X2 = X2 * X2
-X = np.column_stack((X1, X2))  # r2 is 0.74 for Turmeric
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20)
+# X1_train = X1_train * X1_train
+# X2_train = X2_train * X2_train
+# X_train = np.column_stack((X1_train, X2_train))
+# X1_test = X1_test * X1_test
+# X2_test = X2_test * X2_test
+# X_test = np.column_stack((X1_test, X2_test))  # Score: MSE: 29.95 RMSE: 5.47 r2: 0.87
 
 # Model
 model = RandomForestRegressor()
-model.fit(X_train, y_train)
+model.fit(X_train, y_train.values.ravel())
 yPred = model.predict(X_test)
 
-
-# Original features with knn
-# X = np.column_stack((X1, X2))
-# yKnn = y.astype(int)
-# X_train, X_test, y_train, y_test = train_test_split(X, yKnn, test_size=0.2)
-# kmodel = KNeighborsClassifier(n_neighbors=20).fit(X_train, y_train.values.ravel())
-# yPred = kmodel.predict(X_test)
-
-# Polynomial features with knn
-# X3 = X1 * X2
-# X = np.column_stack((X1, X2, X3))
-# yKnn = y.astype(int)
-# X_train, X_test, y_train, y_test = train_test_split(X, yKnn, test_size=0.2)
-# kmodel = KNeighborsClassifier(n_neighbors=20).fit(X_train, y_train.values.ravel())
-# yPred = kmodel.predict(X_test)
-
-# Original features with Lasso (Bad)
-# X = np.column_stack((X1, X2))
-# X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20)
-# model = Lasso(alpha=1 / (2 * 50))  # C=50
-# model.fit(X_train, y_train)
+# >>Original features with knn
+# y_train = y_train.astype(int)
+# model = KNeighborsClassifier(n_neighbors=20).fit(X_train, y_train.values.ravel())
 # yPred = model.predict(X_test)
+# ValueError: Classification metrics can't handle a mix of continuous and multiclass targets
 
-# Polynomial features with Lasso (Still Bad)
-# X3 = X1 * X2
-# X = np.column_stack((X1, X2, X3))
-# X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20)
-# model = Lasso(alpha=1 / (2 * 50))  # C=50
-# model.fit(X_train, y_train)
+# >>Polynomial features with knn
+# X3 = X1_train * X2_train
+# X_train = np.column_stack((X1_train, X2_train, X3))
+# X3_test = X1_test * X2_test
+# X_test = np.column_stack((X1_test, X2_test, X3_test))
+# y_train = y_train.astype(int)
+# model = KNeighborsClassifier(n_neighbors=20).fit(X_train, y_train.values.ravel())
 # yPred = model.predict(X_test)
+# ValueError: Classification metrics can't handle a mix of continuous and multiclass targets
+
+# >>Original features with Lasso (Bad)
+# model = Lasso(alpha=1 / (2 * 5))  # C=5 from lasso.py
+# model.fit(X_train, y_train)
+# yPred = model.predict(X_test)  # Score: MSE: 131.83 RMSE: 11.48 r2: 0.42
+
+# >>Polynomial features with Lasso (Equally Bad)
+# X3 = X1_train * X2_train
+# X_train = np.column_stack((X1_train, X2_train, X3))
+# X3_test = X1_test * X2_test
+# X_test = np.column_stack((X1_test, X2_test, X3_test))
+# model = Lasso(alpha=1 / (2 * 5))  # C=5
+# model.fit(X_train, y_train)
+# yPred = model.predict(X_test)  # Score: MSE: 131.53 RMSE: 11.47 r2: 0.42
 
 # Plots
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 ax.set_title(label)
-ax.scatter(X1, X2, y, color='black', label="Features")
+ax.scatter(X1_train, X2_train, y_train, color='black', label="Features")
 ax.set_xlabel("Temperature")
 ax.set_ylabel("Rainfall")
 ax.set_zlabel("Produce")
