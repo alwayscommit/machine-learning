@@ -47,7 +47,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20)
 
 mean_error = []
 std_error = []
-Ci_range = [0.1, 1, 5, 10, 100, 150, 200, 250]
+Ci_range = [0.1, 1, 5, 10, 15, 50, 75, 100]
 for Ci in Ci_range:
     temp = []
     model = Lasso(alpha=1 / (2 * Ci))

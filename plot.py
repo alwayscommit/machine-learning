@@ -45,7 +45,9 @@ X_scaled = pd.DataFrame(MinMaxScaler().fit_transform(X_original))
 
 X1 = X_scaled.iloc[:, 0]
 X2 = X_scaled.iloc[:, 1]
-X = np.column_stack((X1, X2))
+# add new feature based on rainfall and temp together
+X3 = X1*X2
+X = np.column_stack((X1, X2,X3))
 
 # model = linear_model.LinearRegression()
 model = RandomForestRegressor()
