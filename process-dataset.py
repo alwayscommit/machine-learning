@@ -1,6 +1,6 @@
 import pandas as pd
 
-crop = 'Banana'
+crop = 'Small millets'
 
 train_dataset = pd.DataFrame(columns=['State', 'District', 'Year', 'Season', 'Produce', 'Temperature', 'Rainfall'])
 test_dataset = pd.DataFrame(columns=['State', 'District', 'Year', 'Season', 'Produce', 'Temperature', 'Rainfall'])
@@ -114,6 +114,6 @@ for district in district_list:
                                      'Rainfall': rainfall},
                                     ignore_index=True)
 
-train_dataset.to_csv("train_" + crop + ".csv", index=False)
-test_dataset.to_csv("test_" + crop + ".csv", index=False)
+train_dataset.to_csv("crop_datasets/train_" + crop + ".csv", index=False)
+test_dataset.to_csv("crop_datasets/test_" + crop + ".csv", index=False)
 print("Saving " + crop + " datasets.")
