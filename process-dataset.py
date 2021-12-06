@@ -1,7 +1,7 @@
 import pandas as pd
 import os
 
-crop = 'Sugarcane'
+crop = 'Papaya'
 
 dataset = pd.DataFrame(columns=['State', 'District', 'Year', 'Season', 'Produce', 'Temperature', 'Rainfall'])
 
