@@ -45,7 +45,8 @@ for Ci in Ci_range:
         # r2CV.append(cross_val_score(model, X[test], ypred, cv=5, scoring='r2'))
 
     print("C : ", Ci)
-
+    print("Intercept : %f" % model.intercept_)
+    print("Slope :", *model.coef_)
     print("Root mean squared error: ", np.array(temp).mean())
     print("r2 square: ", np.array(r2).mean())
     rme.append(np.array(temp).mean())
