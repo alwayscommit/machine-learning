@@ -5,8 +5,8 @@ crop = 'Rice'
 dataset = pd.DataFrame(columns=['State', 'Year', 'Season', 'Produce', 'Temperature', 'Rainfall'])
 
 df = pd.read_csv('dataset.csv')
-temperature_df = pd.read_csv('temperature.csv', skiprows=1)
-rainfall_df = pd.read_csv('rainfall2.csv')
+temperature_df = pd.read_csv('dataset-temperature.csv', skiprows=1)
+rainfall_df = pd.read_csv('dataset-rainfall-district.csv')
 
 # get unique states and years
 state_list = sorted(df['State_Name'].unique())

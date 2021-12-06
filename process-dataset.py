@@ -6,7 +6,7 @@ train_dataset = pd.DataFrame(columns=['State', 'District', 'Year', 'Season', 'Pr
 test_dataset = pd.DataFrame(columns=['State', 'District', 'Year', 'Season', 'Produce', 'Temperature', 'Rainfall'])
 
 df = pd.read_csv('dataset.csv')
-temperature_df = pd.read_csv('temperature.csv', skiprows=1)
+temperature_df = pd.read_csv('dataset-temperature.csv', skiprows=1)
 rainfall_df = pd.read_csv('rainfall-processed.csv')
 
 # get unique states and years
