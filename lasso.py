@@ -92,3 +92,17 @@ print("Dummy - r2 square: %.2f" % r2_score(ytest, dummy_pred))
 #       % -cross_val_score(model, Xtest, dummy_pred, cv=5,
 #                          scoring='neg_root_mean_squared_error').mean())
 # print("Dummy - Cross val - r2: %.2f" % cross_val_score(model, Xtest, dummy_pred, cv=5, scoring='r2').mean())
+
+# Plots
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+ax.set_title(label[0])
+ax.scatter(Xtrain[:, 0], Xtrain[:, 1], ytrain, color='black', label="Features")
+ax.set_xlabel("Temperature")
+ax.set_ylabel("Rainfall")
+ax.set_zlabel("Produce")
+predicted_val = ax.plot_trisurf(Xtest[:, 0], Xtest[:, 1], ypred, color='red', label="Predictions")
+predicted_val._facecolors2d = predicted_val._facecolor3d
+predicted_val._edgecolors2d = predicted_val._edgecolor3d
+plt.legend(loc="best")
+plt.show()
