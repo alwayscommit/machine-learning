@@ -31,68 +31,84 @@ X1_test = X_test_original.iloc[:, 0]
 X2_test = X_test_original.iloc[:, 1]
 X_test = np.column_stack((X1_test, X2_test))
 
+means = X_train.mean(axis=0)
+ranges = X_train.max(axis=0) - X_train.min(axis=0)
+X_train_scaled = (X_train - means) / ranges  # scaled X_train using mean Normalization
+X_test_scaled = (X_test - means) / ranges  # scaled X_test using mean Normalization
+X1_train = X_train_scaled[:, 0]
+X2_train = X_train_scaled[:, 1]
+X1_test = X_test_scaled[:, 0]
+X2_test = X_test_scaled[:, 1]
+
 # >>Original features with RandomForestRegressor
 model = RandomForestRegressor()
-model.fit(X_train, y_train.values.ravel())
-yPred = model.predict(X_test)  # Score: MSE: 29.79 RMSE: 5.46 r2: 0.87
+model.fit(X_train_scaled, y_train.values.ravel())
+yPred = model.predict(X_test_scaled)  # Score: MSE: 29.79 RMSE: 5.46 r2: 0.87
+# Scaled scores: MSE: 27.91 RMSE: 5.28 r2: 0.88
 
 # >>Polynomial features with RandomForestRegressor
 # 1. Three features
 # X3 = X1_train * X2_train
-# X_train = np.column_stack((X1_train, X2_train, X3))
+# X_train_scaled = np.column_stack((X1_train, X2_train, X3))
 # X3_test = X1_test * X2_test
-# X_test = np.column_stack((X1_test, X2_test, X3_test))  # Score: MSE: 29.89 RMSE: 5.47 r2: 0.87
+# X_test_scaled = np.column_stack((X1_test, X2_test, X3_test))  # Score: MSE: 29.89 RMSE: 5.47 r2: 0.87
+# Scaled scores: MSE: 28.96 RMSE: 5.38 r2: 0.87
 
 # 2. Square
 # X1_train = X1_train * X1_train
 # X2_train = X2_train * X2_train
-# X_train = np.column_stack((X1_train, X2_train))
+# X_train_scaled = np.column_stack((X1_train, X2_train))
 # X1_test = X1_test * X1_test
 # X2_test = X2_test * X2_test
-# X_test = np.column_stack((X1_test, X2_test))  # Score: MSE: 29.95 RMSE: 5.47 r2: 0.87
+# X_test_scaled = np.column_stack((X1_test, X2_test))  # Score: MSE: 29.95 RMSE: 5.47 r2: 0.87
+# Scaling score worse
 
 # Model
 # model = RandomForestRegressor()
-# model.fit(X_train, y_train.values.ravel())
-# yPred = model.predict(X_test)
+# model.fit(X_train_scaled, y_train.values.ravel())
+# yPred = model.predict(X_test_scaled)
 
 # >>Original features with knn
 # y_train = y_train.astype(int)
-# model = KNeighborsClassifier(n_neighbors=20).fit(X_train, y_train.values.ravel())
-# yPred = model.predict(X_test)  # Very Bad. Score: MSE: 200.32 RMSE: 14.15 r2: 0.11
+# model = KNeighborsClassifier(n_neighbors=20).fit(X_train_scaled, y_train.values.ravel())
+# yPred = model.predict(X_test_scaled)  # Very Bad. Score: MSE: 200.32 RMSE: 14.15 r2: 0.11
+# Scaled scores same`still worse
 
 # >>Polynomial features with knn
 # X3 = X1_train * X2_train
-# X_train = np.column_stack((X1_train, X2_train, X3))
+# X_train_scaled = np.column_stack((X1_train, X2_train, X3))
 # X3_test = X1_test * X2_test
-# X_test = np.column_stack((X1_test, X2_test, X3_test))
+# X_test_scaled = np.column_stack((X1_test, X2_test, X3_test))
 # y_train = y_train.astype(int)
-# model = KNeighborsClassifier(n_neighbors=20).fit(X_train, y_train.values.ravel())
-# yPred = model.predict(X_test)  # Very Bad. Score: MSE: 313.43 RMSE: 17.70 r2: -0.39
+# model = KNeighborsClassifier(n_neighbors=20).fit(X_train_scaled, y_train.values.ravel())
+# yPred = model.predict(X_test_scaled)  # Very Bad. Score: MSE: 313.43 RMSE: 17.70 r2: -0.39
+# Scaled scores: MSE: 200.57 RMSE: 14.16 r2: 0.11
 
 # >>Original features with Lasso (Bad)
 # model = Lasso(alpha=1 / (2 * 5))  # C=5 from lasso.py
-# model.fit(X_train, y_train)
-# yPred = model.predict(X_test)  # Score: MSE: 131.83 RMSE: 11.48 r2: 0.42
+# model.fit(X_train_scaled, y_train)
+# yPred = model.predict(X_test_scaled)  # Score: MSE: 131.83 RMSE: 11.48 r2: 0.42
+# Scaled scores worst
 
 # >>Polynomial features with Lasso (Equally Bad)
 # X3 = X1_train * X2_train
-# X_train = np.column_stack((X1_train, X2_train, X3))
+# X_train_scaled = np.column_stack((X1_train, X2_train, X3))
 # X3_test = X1_test * X2_test
-# X_test = np.column_stack((X1_test, X2_test, X3_test))
+# X_test_scaled = np.column_stack((X1_test, X2_test, X3_test))
 # model = Lasso(alpha=1 / (2 * 5))  # C=5
-# model.fit(X_train, y_train)
-# yPred = model.predict(X_test)  # Score: MSE: 131.53 RMSE: 11.47 r2: 0.42
+# model.fit(X_train_scaled, y_train)
+# yPred = model.predict(X_test_scaled)  # Score: MSE: 131.53 RMSE: 11.47 r2: 0.42
+# Scaled scores worst
 
 # Plots
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 ax.set_title(label)
-ax.scatter(X1_train, X2_train, y_train, color='black', label="Features")
+ax.scatter(X_train_scaled[:, 0], X_train_scaled[:, 1], y_train, color='black', label="Features")
 ax.set_xlabel("Temperature")
 ax.set_ylabel("Rainfall")
 ax.set_zlabel("Produce")
-predicted_val = ax.plot_trisurf(X_test[:, 0], X_test[:, 1], yPred, color='red', label="Predictions")
+predicted_val = ax.plot_trisurf(X_test_scaled[:, 0], X_test_scaled[:, 1], yPred, color='red', label="Predictions")
 predicted_val._facecolors2d = predicted_val._facecolor3d
 predicted_val._edgecolors2d = predicted_val._edgecolor3d
 plt.legend(loc="best")
