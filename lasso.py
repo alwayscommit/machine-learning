@@ -9,8 +9,8 @@ from math import sqrt
 from sklearn.linear_model import Lasso
 
 label = ["Cotton(lint)", "Masoor", "Rice", "Wheat", "Sunflower"]
-df_train = pd.read_csv("crop_datasets/train_" + label[4] + ".csv")
-df_test = pd.read_csv("crop_datasets/test_" + label[4] + ".csv")
+df_train = pd.read_csv("crop_datasets/train_" + label[0] + ".csv")
+df_test = pd.read_csv("crop_datasets/test_" + label[0] + ".csv")
 df_train = df_train.dropna()
 df_test = df_test.dropna()
 
@@ -24,6 +24,7 @@ X_train_scaled = pd.DataFrame(MinMaxScaler().fit_transform(X_train_original))
 X1_train = X_train_scaled.iloc[:, 0]
 X2_train = X_train_scaled.iloc[:, 1]
 X = np.column_stack((X1_train, X2_train))
+
 X_test_scaled = pd.DataFrame(MinMaxScaler().fit_transform(X_test_original))
 X1_test = X_test_scaled.iloc[:, 0]
 X2_test = X_test_scaled.iloc[:, 1]
@@ -95,7 +96,22 @@ ypred = model.predict(X_test)
 print("Dummy - Root mean squared error: %.2f" % sqrt(mean_squared_error(y_test, dummy_pred)))
 print("Dummy - r2 square: %.2f" % r2_score(y_test, dummy_pred))
 
-print("Dummy - Cross val -  Root mean squared error: %.2f"
-      % -cross_val_score(model, X_test, dummy_pred, cv=5,
-                         scoring='neg_root_mean_squared_error').mean())
-print("Dummy - Cross val - r2: %.2f" % cross_val_score(model, X_test, dummy_pred, cv=5, scoring='r2').mean())
+# print("Dummy - Cross val -  Root mean squared error: %.2f"
+#       % -cross_val_score(model, X_test, dummy_pred, cv=5,
+#                          scoring='neg_root_mean_squared_error').mean())
+# print("Dummy - Cross val - r2: %.2f" % cross_val_score(model, X_test, dummy_pred, cv=5, scoring='r2').mean())
+
+
+# Plots
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+ax.set_title(label[0])
+ax.scatter(X[:, 0], X[:, 1], y, color='black', label="Features")
+ax.set_xlabel("Temperature")
+ax.set_ylabel("Rainfall")
+ax.set_zlabel("Produce")
+predicted_val = ax.plot_trisurf(X_test[:, 0], X_test[:, 1], ypred, color='red', label="Predictions")
+predicted_val._facecolors2d = predicted_val._facecolor3d
+predicted_val._edgecolors2d = predicted_val._edgecolor3d
+plt.legend(loc="best")
+plt.show()
