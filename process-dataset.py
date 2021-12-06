@@ -86,7 +86,6 @@ for district in district_list:
                                  'Rainfall': rainfall},
                                 ignore_index=True)
 
-
 filename = crop + ".csv"
 outdir = './crop_dataset'
 if not os.path.exists(outdir):

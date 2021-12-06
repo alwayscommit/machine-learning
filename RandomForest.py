@@ -7,6 +7,7 @@ from math import sqrt
 from sklearn.dummy import DummyRegressor
 
 df = pd.read_csv("crop_dataset/Wheat.csv")
+
 X_original = df[['Temperature', 'Rainfall']]
 y = df['Produce']
 
