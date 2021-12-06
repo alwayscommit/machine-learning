@@ -2,12 +2,13 @@ from math import sqrt
 
 import numpy as np
 import pandas as pd
+from matplotlib import pyplot as plt
 from skimage.metrics import mean_squared_error
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import r2_score
 from sklearn.preprocessing import MinMaxScaler, OrdinalEncoder
 
-crop='Rice'
+crop='Wheat'
 df_test = pd.read_csv("crop_datasets/test_"+crop+".csv")
 df_train = pd.read_csv("crop_datasets/train_"+crop+".csv")
 
@@ -57,6 +58,23 @@ X_test = np.column_stack((X1_test, X2_test, X3_test, X4_test))
 regr = RandomForestRegressor()
 regr.fit(X_train, y)
 yPred = regr.predict(X_test)
+
+featureNames=[]
+featureImportance=[]
+# Remove fields that we can't use as features
+df_train.drop(['Year','District','Produce'],inplace = True, axis = 1)
+# get the importance of the different columns in the datafield
+for f, n in zip(df_train, regr.feature_importances_):
+    featureNames.append(f)
+    featureImportance.append(n)
+
+plt.rc('font', size=18)
+plt.rcParams['figure.constrained_layout.use'] = True
+plt.barh(featureNames, featureImportance)
+plt.xlabel('Importance')
+plt.ylabel('Feature')
+plt.title(crop)
+plt.show()
 
 print(regr.score(X_test, y_test))
 print("Mean squared error: %.2f" % mean_squared_error(y_test, yPred))
