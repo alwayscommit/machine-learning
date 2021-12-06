@@ -46,8 +46,8 @@ X_scaled = pd.DataFrame(MinMaxScaler().fit_transform(X_original))
 X1 = X_scaled.iloc[:, 0]
 X2 = X_scaled.iloc[:, 1]
 # add new feature based on rainfall and temp together
-X3 = X1*X2
-X = np.column_stack((X1, X2,X3))
+X3 = X1 * X2
+X = np.column_stack((X1, X2, X3))
 
 # model = linear_model.LinearRegression()
 model = RandomForestRegressor()
@@ -59,11 +59,10 @@ model = RandomForestRegressor()
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.10)
 
-#ravel() is used for for random forest
+# ravel() is used for for random forest
 model.fit(X_train, y_train.values.ravel())
 # model.fit(X_train, y_train)
 yPred = model.predict(X_test)
-
 
 # yPred_individual = linear.predict([[]])
 
