@@ -46,11 +46,11 @@ for Ci in Ci_range:
         ypred = model.predict(X[test])
 
         temp.append(sqrt(mean_squared_error(y[test], ypred)))
-        tempCV.append(
-            -cross_val_score(model, X[test], ypred, cv=5, scoring='neg_root_mean_squared_error'))
+        # tempCV.append(
+        #     -cross_val_score(model, X[test], ypred, cv=5, scoring='neg_root_mean_squared_error'))
 
         r2.append(r2_score(y[test], ypred))
-        r2CV.append(cross_val_score(model, X[test], ypred, cv=5, scoring='r2'))
+        # r2CV.append(cross_val_score(model, X[test], ypred, cv=5, scoring='r2'))
 
     print("C : ", Ci)
 
@@ -60,10 +60,10 @@ for Ci in Ci_range:
     rme.append(np.array(temp).mean())
     std_error.append(np.array(rme).std())
 
-    print("Root mean squared error: ", np.array(tempCV).mean())
-    print("r2: ", np.array(r2CV).mean())
-    rmeCV.append(np.array(tempCV).mean())
-    std_errorCV.append(np.array(rmeCV).std())
+    # print("Root mean squared error: ", np.array(tempCV).mean())
+    # print("r2: ", np.array(r2CV).mean())
+    # rmeCV.append(np.array(tempCV).mean())
+    # std_errorCV.append(np.array(rmeCV).std())
 
 plt.errorbar(Ci_range, rme, yerr=std_error)
 plt.title("Normal Root Mean Square Error")
@@ -74,14 +74,14 @@ plt.rc('font', size=18)
 plt.rcParams['figure.constrained_layout.use'] = True
 plt.show()
 
-plt.errorbar(Ci_range, rmeCV, yerr=std_errorCV)
-plt.title("Cross Validation Neg Root Mean Square Error")
-plt.xlabel('Ci')
-plt.ylabel("RMSE")
-# plt.xlim(0, 250)
-plt.rc('font', size=18)
-plt.rcParams['figure.constrained_layout.use'] = True
-plt.show()
+# plt.errorbar(Ci_range, rmeCV, yerr=std_errorCV)
+# plt.title("Cross Validation Neg Root Mean Square Error")
+# plt.xlabel('Ci')
+# plt.ylabel("RMSE")
+# # plt.xlim(0, 250)
+# plt.rc('font', size=18)
+# plt.rcParams['figure.constrained_layout.use'] = True
+# plt.show()
 
 # Compare Against Dummy Classifier
 dummy_regr = DummyRegressor(strategy="mean")
