@@ -1,7 +1,7 @@
 import pandas as pd
 
 #This file is responsible for cleaning up the rainfall dataset
-rainfall_df = pd.read_csv('rainfall2.csv', index_col=False)
+rainfall_df = pd.read_csv('dataset-rainfall-district.csv', index_col=False)
 
 #DATE formatting to extract out YEAR and MONTH as separate columns required to be merged with crop dataset
 rainfall_df['DATE'] = pd.to_datetime(rainfall_df['DATE'], errors='coerce')

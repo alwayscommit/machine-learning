@@ -1,12 +1,12 @@
 import pandas as pd
+import os
 
-crop = 'Potato'
+crop = 'Banana'
 
-train_dataset = pd.DataFrame(columns=['State', 'District', 'Year', 'Season', 'Produce', 'Temperature', 'Rainfall'])
-test_dataset = pd.DataFrame(columns=['State', 'District', 'Year', 'Season', 'Produce', 'Temperature', 'Rainfall'])
+dataset = pd.DataFrame(columns=['State', 'District', 'Year', 'Season', 'Produce', 'Temperature', 'Rainfall'])
 
 df = pd.read_csv('dataset.csv')
-temperature_df = pd.read_csv('temperature.csv', skiprows=1)
+temperature_df = pd.read_csv('dataset-temperature.csv', skiprows=1)
 rainfall_df = pd.read_csv('rainfall-processed.csv')
 
 # get unique states and years
@@ -18,32 +18,12 @@ df['Season'] = df['Season'].str.strip()
 df['Crop'] = df['Crop'].str.strip()
 df['District_Name'] = df['District_Name'].str.strip()
 
-# print("Rainfall Years: %", sorted(rainfall_df['YEAR'].unique()))
-
-# print("Rainfall districts: ", sorted(rainfall_df["DISTRICTS_NAME"].unique()))
-# print("Crop districts: ", sorted(df["District_Name"].unique()))
-
-# print("Rainfall states: ", sorted(rainfall_df["INDIAN_STATES_NAME"].unique()))
-# print("Crop states: ", sorted(df["State_Name"].unique()))
-
-# print("Rainfall districts Length: ", len(rainfall_df["DISTRICTS_NAME"].unique()))
-# print("Crop districts Length: ", len(df["District_Name"].unique()))
-
 season_list = ["Kharif", "Rabi", "Whole Year", "Summer", "Winter"]
 year_list = [2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015]
 district_list = df["District_Name"].unique()
 
 # ignore states because temperature not found
 ignore_state_list = ["Jammu and Kashmir", "Telangana"]
-
-# print(state_list)
-# print(sorted(rainfall_df["SUBDIVISION"].unique()))
-
-# temperature_df = temperature_df[
-# temperature_df.columns.drop(list(temperature_df.filter(regex='Administrative unit not ava*')))]
-
-crop_ss = df[df["Crop"] == crop]
-last_year = sorted(crop_ss['Crop_Year'].unique())[-1]
 
 for district in district_list:
     district_subset = df[df["District_Name"] == district]
@@ -99,21 +79,18 @@ for district in district_list:
                         temp_state_df = temp_year_df[state]
 
                         if not rainfall_year_df.empty and not temp_state_df.empty and (not pd.isna(produce)):
-                            if year != last_year:
-                                train_dataset = train_dataset.append(
-                                    {'State': state, 'District': district, 'Year': year, 'Season': combined_season,
-                                     'Produce': produce,
-                                     'Temperature': temp_state_df.iloc[0],
-                                     'Rainfall': rainfall},
-                                    ignore_index=True)
-                            if year == last_year:
-                                test_dataset = test_dataset.append(
-                                    {'State': state, 'District': district, 'Year': year, 'Season': combined_season,
-                                     'Produce': produce,
-                                     'Temperature': temp_state_df.iloc[0],
-                                     'Rainfall': rainfall},
-                                    ignore_index=True)
+                            dataset = dataset.append(
+                                {'State': state, 'District': district, 'Year': year, 'Season': combined_season,
+                                 'Produce': produce,
+                                 'Temperature': temp_state_df.iloc[0],
+                                 'Rainfall': rainfall},
+                                ignore_index=True)
 
-train_dataset.to_csv("train_" + crop + ".csv", index=False)
-test_dataset.to_csv("test_" + crop + ".csv", index=False)
-print("Saving " + crop + " datasets.")
+
+filename = crop + ".csv"
+outdir = './crop_dataset'
+if not os.path.exists(outdir):
+    os.mkdir(outdir)
+fullname = os.path.join(outdir, filename)
+dataset.to_csv(fullname, index=False)
+print("Saving " + crop + " dataset.")
