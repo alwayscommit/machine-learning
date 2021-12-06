@@ -7,7 +7,7 @@ from sklearn.metrics import mean_squared_error, r2_score
 from math import sqrt
 from sklearn.linear_model import Lasso
 
-# Cotton  Masoor Rice Wheat Sunflower
+# Cotton(lint)  Masoor Rice Wheat Sunflower
 
 df_rice = pd.read_csv("Cotton(lint).csv")
 df_rice = df_rice.dropna()
@@ -15,7 +15,7 @@ df_potato = pd.read_csv("Masoor.csv")
 df_potato = df_potato.dropna()
 df_banana = pd.read_csv("Rice.csv")
 df_banana = df_banana.dropna()
-df_rice = pd.read_csv("Wheat.csv")  # TAKE FROM MAIN
+df_rice = pd.read_csv("Wheat.csv")
 df_rice = df_rice.dropna()
 df_potato = pd.read_csv("Sunflower.csv")
 df_potato = df_potato.dropna()
@@ -70,3 +70,4 @@ plt.show()
 
 plt.rc('font', size=18)
 plt.rcParams['figure.constrained_layout.use'] = True
+
