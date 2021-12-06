@@ -5,10 +5,11 @@ import pandas as pd
 from skimage.metrics import mean_squared_error
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import r2_score
-from sklearn.preprocessing import MinMaxScaler, OneHotEncoder
+from sklearn.preprocessing import MinMaxScaler, OneHotEncoder, PolynomialFeatures
 
-df_test = pd.read_csv("test_Banana.csv")
-df_train = pd.read_csv("train_Banana.csv")
+crop='Rice'
+df_test = pd.read_csv("crop_datasets/test_"+crop+".csv")
+df_train = pd.read_csv("crop_datasets/train_"+crop+".csv")
 
 oneHotEncoder = OneHotEncoder(handle_unknown='ignore')
 # renaming the encoded columns "Season"+ their values(feature names)
@@ -36,24 +37,39 @@ y_test = encoded_test_df['Produce']
 # X_test_scaled = pd.DataFrame(scale.transform(X_original_test))
 
 X1 = X_original.iloc[:, 0]
+X1_1=X1*X1
 X2 = X_original.iloc[:, 1]
+X2_1=X2*X2
 X4 = X_original.iloc[:, 2]
 X5 = X_original.iloc[:, 3]
 X6 = X_original.iloc[:, 4]
 X3 = X1 * X2
 X_train = np.column_stack((X1, X2, X3, X4, X5, X6))
+# X_train = np.column_stack((X1, X2, X4, X5, X6))
+# X_train = np.column_stack((X1_1, X2_1, X3, X4, X5, X6))
+# X_train = np.column_stack((X1_1, X2_1, X4, X5, X6))
 
 X1_test = X_original_test.iloc[:, 0]
+X1_t=X1_test*X1_test
 X2_test = X_original_test.iloc[:, 1]
+X2_t=X2_test*X2_test
 X4_test = X_original_test.iloc[:, 2]
 X5_test = X_original_test.iloc[:, 3]
 X6_test = X_original_test.iloc[:, 4]
 X3_test = X1_test * X2_test
 X_test = np.column_stack((X1_test, X2_test, X3_test, X4_test, X5_test, X6_test))
+# X_test = np.column_stack((X1_test, X2_test, X4_test, X5_test, X6_test))
+# X_test = np.column_stack((X1_t, X2_t, X3_test, X4_test, X5_test, X6_test))
+# X_test = np.column_stack((X1_t, X2_t, X4_test, X5_test, X6_test))
 
 regr = RandomForestRegressor()
 regr.fit(X_train, y)
 yPred = regr.predict(X_test)
+
+# get the importance of the different columns in the datafield
+features = df_train.columns[0:-1]
+for f in zip(features, regr.feature_importances_):
+    print(f)
 
 print(regr.score(X_test, y_test))
 print("Mean squared error: %.2f" % mean_squared_error(y_test, yPred))

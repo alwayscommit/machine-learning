@@ -7,21 +7,30 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import r2_score
 from sklearn.preprocessing import MinMaxScaler, OrdinalEncoder
 
-df_test = pd.read_csv("test_Banana.csv")
-df_train = pd.read_csv("train_Banana.csv")
+crop='Rice'
+df_test = pd.read_csv("crop_datasets/test_"+crop+".csv")
+df_train = pd.read_csv("crop_datasets/train_"+crop+".csv")
 
 ordinal_encoder = OrdinalEncoder()
+# encoded_seasons_df_train = pd.DataFrame(ordinal_encoder.fit_transform(df_train[['State']]), columns=['StateEnc'])
+# encoded_seasons_df_train = pd.DataFrame(ordinal_encoder.fit_transform(df_train[['Season', 'State']]), columns=['SeasonEncoded','StateEnc'])
 encoded_seasons_df_train = pd.DataFrame(ordinal_encoder.fit_transform(df_train[['Season']]), columns=['SeasonEncoded'])
 # join the encoded Seasons dataframe to the original training dataframe
 encoded_train_df = df_train.join(encoded_seasons_df_train)
 
+# encoded_seasons_df_test = pd.DataFrame(ordinal_encoder.fit_transform(df_test[['State']]), columns=['StateEnc'])
+# encoded_seasons_df_test = pd.DataFrame(ordinal_encoder.fit_transform(df_test[['Season', 'State']]), columns=['SeasonEncoded','StateEnc'])
 encoded_seasons_df_test = pd.DataFrame(ordinal_encoder.fit_transform(df_test[['Season']]), columns=['SeasonEncoded'])
 encoded_test_df = df_test.join(encoded_seasons_df_train)
 
 X_original = encoded_train_df[['Temperature', 'Rainfall', 'SeasonEncoded']]
+# X_original = encoded_train_df[['Temperature', 'Rainfall', 'StateEnc']]
+# X_original = encoded_train_df[['Temperature', 'Rainfall', 'SeasonEncoded','StateEnc']]
 y = encoded_train_df['Produce']
 
 X_original_test = encoded_test_df[['Temperature', 'Rainfall', 'SeasonEncoded']]
+# X_original_test = encoded_test_df[['Temperature', 'Rainfall','StateEnc']]
+# X_original_test = encoded_test_df[['Temperature', 'Rainfall', 'SeasonEncoded','StateEnc']]
 y_test = encoded_test_df['Produce']
 
 #scaling doesn't improve the score much, commented for now.
@@ -33,12 +42,16 @@ X1 = X_train_scaled.iloc[:, 0]
 X2 = X_train_scaled.iloc[:, 1]
 X3 = X1 * X2
 X4 = X_train_scaled.iloc[:, 2]
+# X5 = X_train_scaled.iloc[:, 3]
+# X_train = np.column_stack((X1, X2, X3, X4,X5))
 X_train = np.column_stack((X1, X2, X3, X4))
 
 X1_test = X_test_scaled.iloc[:, 0]
 X2_test = X_test_scaled.iloc[:, 1]
 X3_test = X1_test * X2_test
 X4_test = X_test_scaled.iloc[:, 2]
+# X5_test = X_test_scaled.iloc[:, 3]
+# X_test = np.column_stack((X1_test, X2_test, X3_test, X4_test, X5_test))
 X_test = np.column_stack((X1_test, X2_test, X3_test, X4_test))
 
 regr = RandomForestRegressor()
