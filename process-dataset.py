@@ -1,7 +1,7 @@
 import pandas as pd
 import os
 
-crop = 'Banana'
+crop = 'Sugarcane'
 
 dataset = pd.DataFrame(columns=['State', 'District', 'Year', 'Season', 'Produce', 'Temperature', 'Rainfall'])
 
@@ -85,7 +85,6 @@ for district in district_list:
                                  'Temperature': temp_state_df.iloc[0],
                                  'Rainfall': rainfall},
                                 ignore_index=True)
-
 
 filename = crop + ".csv"
 outdir = './crop_dataset'
