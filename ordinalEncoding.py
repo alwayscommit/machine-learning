@@ -6,12 +6,12 @@ from matplotlib import pyplot as plt
 from skimage.metrics import mean_squared_error
 from sklearn.dummy import DummyRegressor
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import r2_score
+from sklearn.metrics import r2_score, confusion_matrix
 from sklearn.model_selection import cross_val_score, KFold, train_test_split
 from sklearn.preprocessing import MinMaxScaler, OrdinalEncoder
 
 # In this file, we add features and implement random forest with customer n_estimators
-crop = 'Rice' #Pass the crop name
+crop = 'Cotton(lint)' #Pass the crop name
 df = pd.read_csv("crop_dataset/" + crop + ".csv")
 
 ordinal_encoder = OrdinalEncoder()
@@ -63,11 +63,14 @@ plt.xlabel('N')
 plt.ylabel('R-Square')
 plt.show()
 
-
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20)
 print(nVal)
 regr = RandomForestRegressor(n_estimators=nVal, random_state=0, n_jobs=-1)
-regr.fit(X, y)
-yPred = regr.predict(X)
+regr.fit(X_train, y_train)
+yPred = regr.predict(X_test)
+
+
+confusion_matrix(y_test, yPred)
 
 print(regr.score(X, y))
 print("Root mean squared error: %.2f" % sqrt(mean_squared_error(y, yPred)))

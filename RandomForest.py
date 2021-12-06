@@ -6,7 +6,7 @@ from sklearn.model_selection import cross_val_score, train_test_split
 from sklearn.preprocessing import MinMaxScaler
 
 # This file is just a basic random forest and select the best features
-crop = "Rice"
+crop = "Cotton(lint)"
 df = pd.read_csv("crop_dataset/" + crop + ".csv")
 X_original = df[['Temperature', 'Rainfall']]
 y = df['Produce']
