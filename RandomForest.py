@@ -4,10 +4,11 @@ from matplotlib import pyplot as plt
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import cross_val_score, train_test_split
 from sklearn.preprocessing import MinMaxScaler
+from sklearn.metrics import mean_squared_error, r2_score
+from math import sqrt
+from sklearn.dummy import DummyRegressor
 
-# This file is just a basic random forest and select the best features
-crop = "Cotton(lint)"
-df = pd.read_csv("crop_dataset/" + crop + ".csv")
+df = pd.read_csv("crop_dataset/Wheat.csv")
 X_original = df[['Temperature', 'Rainfall']]
 y = df['Produce']
 
